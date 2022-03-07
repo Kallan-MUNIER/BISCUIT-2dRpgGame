@@ -1,4 +1,4 @@
- global:
+global:
   category: "PICK_UP"
   name: "Clé"
   collision: false

@@ -19,12 +19,12 @@ public class Sound {
 		soundsUrl.add(getClass().getResource("/sounds/unlock.wav"));
 	}
 	
-	public void setFile(int i) {
+	public void setFile(int i, float volume) {
 		try {
 			AudioInputStream ais = AudioSystem.getAudioInputStream(soundsUrl.get(i));
 			clip = AudioSystem.getClip();
 			clip.open(ais);
-			setVolume(0.1F);
+			setVolume(volume);
 		}catch(Exception e) {
 			e.printStackTrace();
 		}

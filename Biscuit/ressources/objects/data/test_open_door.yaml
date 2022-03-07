@@ -1,7 +1,7 @@
 global:
-  category: "OPEN"
-  name: "Coffre"
-  collision: true
+  category: "SIMPLE"
+  name: "Porte ouverte"
+  collision: false
   hit-box:
     x: 999999
     y: 999999
@@ -9,4 +9,4 @@ global:
     height: 1
   sprites-animation-counter: 30
   sprites-path:
-  - "/objects/sprites/chest.png"
+  - "/objects/sprites/open_door_3.png"

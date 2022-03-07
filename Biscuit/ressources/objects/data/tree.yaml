@@ -1,12 +1,12 @@
 global:
-  category: "OPEN"
-  name: "Coffre"
+  category: "SIMPLE"
+  name: "Arbre"
   collision: true
   hit-box:
-    x: 999999
+    x: 7
     y: 999999
-    width: 1
+    width: 1.4
     height: 1
   sprites-animation-counter: 30
   sprites-path:
-  - "/objects/sprites/chest.png"
+  - "/objects/sprites/tree.png"

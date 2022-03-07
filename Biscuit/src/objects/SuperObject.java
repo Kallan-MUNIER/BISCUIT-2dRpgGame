@@ -17,6 +17,7 @@ import main.Test;
 import objects.blocked.BlockedObject;
 import objects.open.OpenObject;
 import objects.pick_up.PickUpObject;
+import objects.simple.SimpleObject;
 
 public class SuperObject {
 
@@ -29,7 +30,7 @@ public class SuperObject {
 	
 	protected String name;
 	protected boolean hasCollision;
-	protected int worldX, worldY;
+	protected int worldX, worldY, tileX, tileY;
 	protected Rectangle hitBox;
 	protected GamePanel gamePanel;
 	
@@ -49,10 +50,10 @@ public class SuperObject {
 		
 		hasCollision = config.getBoolean("global.collision");
 		
-		int hitBoxX = gamePanel.getTileSize()/config.getInt("global.hit-box.x");
-		int hitBoxY = gamePanel.getTileSize()/config.getInt("global.hit-box.y");
-		int hitBoxWidth = gamePanel.getTileSize()/config.getInt("global.hit-box.width");
-		int hitBoxHeight = gamePanel.getTileSize()/config.getInt("global.hit-box.height");
+		int hitBoxX = (int)(gamePanel.getTileSize()/config.getDouble("global.hit-box.x"));
+		int hitBoxY = (int)(gamePanel.getTileSize()/config.getDouble("global.hit-box.y"));
+		int hitBoxWidth = (int)(gamePanel.getTileSize()/config.getDouble("global.hit-box.width"));
+		int hitBoxHeight = (int)(gamePanel.getTileSize()/config.getDouble("global.hit-box.height"));
 		
 		spriteMaxCounter = config.getInt("global.sprites-animation-counter");
 		
@@ -115,6 +116,8 @@ public class SuperObject {
 		switch(category) {
 		case BLOCKED:
 			BlockedObject blockedObject = new BlockedObject(type, gamePanel);
+			blockedObject.tileX = tileX;
+			blockedObject.tileY = tileY;
 			blockedObject.worldX = tileX*gamePanel.getTileSize();
 			blockedObject.worldY = tileY*gamePanel.getTileSize();
 			return blockedObject;
@@ -122,14 +125,25 @@ public class SuperObject {
 			break;
 		case OPEN:
 			OpenObject openObject = new OpenObject(type, gamePanel);
+			openObject.tileX = tileX;
+			openObject.tileY = tileY;
 			openObject.worldX = tileX*gamePanel.getTileSize();
 			openObject.worldY = tileY*gamePanel.getTileSize();
 			return openObject;
 		case PICK_UP:
 			PickUpObject pickUpObject = new PickUpObject(type, gamePanel);
+			pickUpObject.tileX = tileX;
+			pickUpObject.tileY = tileY;
 			pickUpObject.worldX = tileX*gamePanel.getTileSize();
 			pickUpObject.worldY = tileY*gamePanel.getTileSize();
 			return pickUpObject;
+		case SIMPLE:
+			SimpleObject simpleObject = new SimpleObject(type, gamePanel);
+			simpleObject.tileX = tileX;
+			simpleObject.tileY = tileY;
+			simpleObject.worldX = tileX*gamePanel.getTileSize();
+			simpleObject.worldY = tileY*gamePanel.getTileSize();
+			return simpleObject;
 		}
 		
 		return null;

@@ -2,9 +2,11 @@ package objects;
 
 public enum ObjectType {
 
-	TEST_KEY(0, "/objects/data/test_key.yaml"),
-	TEST_DOOR(1, "/objects/data/test_door.yaml"),
-	TEST_CHEST(2, "/objects/data/test_chest.yaml");
+	KEY(-1, "/objects/data/test_key.yaml"),
+	DOOR(-2, "/objects/data/test_door.yaml"),
+	CHEST(-3, "/objects/data/test_chest.yaml"),
+	OPEN_DOOR(-4, "/objects/data/test_open_door.yaml"),
+	TREE(-5, "/objects/data/tree.yaml");
 	
 	private int id;
 	private String path;

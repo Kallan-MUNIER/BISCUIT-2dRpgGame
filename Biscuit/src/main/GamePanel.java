@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import javax.swing.JPanel;
 
 import entities.Player;
+import objects.ObjectType;
 import objects.SuperObject;
 import sounds.Sound;
 import tiles.TilesManagement;
@@ -22,7 +23,7 @@ public class GamePanel extends JPanel implements Runnable {
 	
 	// Paramètre de l'écran
 	private final int originalTileSize = 32; // Taille en pixel d'une case
-	private final int scale = 3;
+	private final int scale = 2;
 	
 	private final int tileSize = originalTileSize * scale; // Taille d'une case: 96xpx x 48==96px
 	private final int maxScreenCol = 16;
@@ -32,7 +33,7 @@ public class GamePanel extends JPanel implements Runnable {
 	private final int screenHeight = tileSize*maxScreenRow; // 576px
 	
 	private final int maxWorldCol = 21;
-	private final int maxWorldRow = 19;
+	private final int maxWorldRow = 29;
 	private final int worldWidth = tileSize*maxWorldCol;
 	private final int worldHeight = tileSize*maxWorldRow;
 	
@@ -44,7 +45,6 @@ public class GamePanel extends JPanel implements Runnable {
 	private Thread gameThread;
 	private CollisionChecker collisionChecker = new CollisionChecker(this);
 	private Player player = new Player(this, keyHandler);
-	private AssetSetter assetSetter = new AssetSetter(this);
 	private ArrayList<SuperObject> objects = new ArrayList<>();
 	private TimeController timeController = new TimeController(TimeState.NIGHT_TO_DAY, fps*60*8, fps*60*8, fps*60*2, fps*60*2);
 	
@@ -59,10 +59,18 @@ public class GamePanel extends JPanel implements Runnable {
 	}
 	
 	public void setupGame() {
-		assetSetter.setObject();
+		setObjects();
 		playMusic();
 	}
 	
+	private void setObjects() {
+		objects.add(SuperObject.create(ObjectType.KEY, this, 3, 12));
+		objects.add(SuperObject.create(ObjectType.DOOR, this, 8, 7));
+		objects.add(SuperObject.create(ObjectType.CHEST, this, 8, 4));
+		
+		objects.add(SuperObject.create(ObjectType.TREE, this, 6, 8));
+	}
+
 	public void startGameThread() {
 		gameThread = new Thread(this);
 		gameThread.start();
@@ -107,7 +115,7 @@ public class GamePanel extends JPanel implements Runnable {
 	}
 	
 	public void playMusic() {
-		sound.setFile(0);
+		sound.setFile(0, 0.1F);
 		sound.play();
 		sound.loop();
 	}
@@ -126,8 +134,8 @@ public class GamePanel extends JPanel implements Runnable {
 		tilesManagement.draw(graphics2d);
 		
 		// Affiche les objets
-		for(SuperObject object : objects) {
-			object.draw(graphics2d);
+		for(int i = 0; i < objects.size(); i++) {
+			objects.get(i).draw(graphics2d);
 		}
 		
 		// Affiche le joueur
@@ -142,10 +150,10 @@ public class GamePanel extends JPanel implements Runnable {
 		graphics2d.setColor(Color.WHITE);
 		
 		if(keyHandler.isDebugActif()) {
-			graphics2d.drawString("Click 'A' for remove debug", 10, 20);
+			graphics2d.drawString("Press 'A' to stop debugging", 10, 20);
 		}
 		else {
-			graphics2d.drawString("Click 'A' for debug", 10, 20);
+			graphics2d.drawString("Press 'A' to debug", 10, 20);
 		}
 		
 		graphics2d.dispose();
@@ -201,10 +209,6 @@ public class GamePanel extends JPanel implements Runnable {
 
 	public TilesManagement getTileManager() {
 		return tilesManagement;
-	}
-
-	public AssetSetter getAssetSetter() {
-		return assetSetter;
 	}
 
 	public ArrayList<SuperObject> getObjects() {

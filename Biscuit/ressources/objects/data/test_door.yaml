@@ -1,4 +1,4 @@
- global:
+global:
   category: "BLOCKED"
   name: "Porte"
   collision: true
@@ -10,3 +10,12 @@
   sprites-animation-counter: 30
   sprites-path:
   - "/objects/sprites/door.png"
+open:
+  open-sprites-animation-counter: 5
+  open-sprites-path:
+  - "/objects/sprites/open_door_0.png"
+  - "/objects/sprites/open_door_1.png"
+  - "/objects/sprites/open_door_2.png"
+  - "/objects/sprites/open_door_3.png"
+  has-open-object: true
+  open-object-type: "OPEN_DOOR"

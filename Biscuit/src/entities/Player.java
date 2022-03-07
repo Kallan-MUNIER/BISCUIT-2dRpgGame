@@ -9,6 +9,7 @@ import java.awt.image.BufferedImage;
 import main.GamePanel;
 import main.KeyHandler;
 import objects.SuperObject;
+import objects.blocked.BlockedObject;
 
 public class Player extends Entity {
 
@@ -42,7 +43,7 @@ public class Player extends Entity {
 	public void setDefaultValues() {
 		worldX = gamePanel.getTileSize()*3;
 		worldY = gamePanel.getTileSize()*10;
-		defaultSpeed = 4;
+		defaultSpeed = gamePanel.getTileSize()/16;
 		direction = EntityDirection.DOWN;
 		
 		maxStamina = 180;
@@ -119,14 +120,15 @@ public class Player extends Entity {
 		case PICK_UP:
 			gamePanel.getObjects().remove(object);
 			key++;
-			gamePanel.getSound().setFile(1);
+			gamePanel.getSound().setFile(1, 1F);
 			gamePanel.getSound().play();
 			break;
 		case BLOCKED:
+			BlockedObject blockedObject = (BlockedObject) object;
 			if(key > 0) {
-				gamePanel.getObjects().remove(object);
+				blockedObject.setIsOpen(true);
 				key--;
-				gamePanel.getSound().setFile(2);
+				gamePanel.getSound().setFile(2, 1F);
 				gamePanel.getSound().play();
 			}
 			break;

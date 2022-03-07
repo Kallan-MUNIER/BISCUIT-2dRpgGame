@@ -2,10 +2,11 @@ package objects;
 
 public enum ObjectCategory {
 
-	PICK_UP(0),
-	OPEN(1),
-	BLOCKED(2),
-	ELEVATOR(3);
+	SIMPLE(0),
+	PICK_UP(1),
+	OPEN(2),
+	BLOCKED(3),
+	ELEVATOR(4);
 	
 	private int id;
 
