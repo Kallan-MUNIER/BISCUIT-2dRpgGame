@@ -4,6 +4,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import entities.EntityDirection;
+
 public class KeyHandler implements KeyListener {
 	
 	private boolean upPressed, downPressed, leftPressed, rightPressed, debugPressed, speedPressed;
@@ -46,11 +48,40 @@ public class KeyHandler implements KeyListener {
 		}
 	}
 	
+	public EntityDirection getDirection() {
+		int nb = numberOfDirectionImputPressed();
+		
+		if(nb == 1) {
+			if(upPressed) return EntityDirection.UP;
+			if(downPressed) return EntityDirection.DOWN;
+			if(rightPressed) return EntityDirection.RIGHT;
+			if(leftPressed) return EntityDirection.LEFT;
+		}
+		else if(nb == 2) {
+			if(upPressed && rightPressed) return EntityDirection.UP_RIGHT;
+			if(upPressed && leftPressed) return EntityDirection.UP_LEFT;
+			if(downPressed && rightPressed) return EntityDirection.DOWN_RIGHT;
+			if(downPressed && leftPressed) return EntityDirection.DOWN_LEFT;
+		}
+		
+		return EntityDirection.NONE;
+	}
+	
 	private void checkNewInput(boolean debugPressed, boolean isPressed, AtomicBoolean debugActif) {
 		if(!isPressed) return;
 		if(debugPressed == isPressed) return;
 		
 		debugActif.set(!debugActif.get());
+	}
+	
+	public int numberOfDirectionImputPressed() {
+		int value = 0;
+		if(upPressed) value++;
+		if(leftPressed) value++;
+		if(rightPressed) value++;
+		if(downPressed) value++;
+		
+		return value;
 	}
 
 	public boolean hasKeyPressed() {

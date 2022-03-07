@@ -22,12 +22,12 @@ public class GamePanel extends JPanel implements Runnable {
 	private static final long serialVersionUID = 1L;
 	
 	// Paramètre de l'écran
-	private final int originalTileSize = 32; // Taille en pixel d'une case
-	private final int scale = 2;
+	private final int originalTileSize = 16; // Taille en pixel d'une case
+	private final int scale = 6;
 	
 	private final int tileSize = originalTileSize * scale; // Taille d'une case: 96xpx x 48==96px
-	private final int maxScreenCol = 16;
-	private final int maxScreenRow = 12;
+	private final int maxScreenCol = 20;
+	private final int maxScreenRow = 10;
 	
 	private final int screenWidth = tileSize*maxScreenCol; // 768px
 	private final int screenHeight = tileSize*maxScreenRow; // 576px
@@ -68,6 +68,8 @@ public class GamePanel extends JPanel implements Runnable {
 		objects.add(SuperObject.create(ObjectType.DOOR, this, 8, 7));
 		objects.add(SuperObject.create(ObjectType.CHEST, this, 8, 4));
 		
+		objects.add(SuperObject.create(ObjectType.TREE, this, 4, 8));
+		objects.add(SuperObject.create(ObjectType.TREE, this, 5, 8));
 		objects.add(SuperObject.create(ObjectType.TREE, this, 6, 8));
 	}
 

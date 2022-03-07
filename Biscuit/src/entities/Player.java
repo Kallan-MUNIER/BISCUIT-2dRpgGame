@@ -26,6 +26,8 @@ public class Player extends Entity {
 	
 	private int currentSpeed;
 	
+	private boolean move = false;
+	
 	private int key = 0;
 	
 	public Player(GamePanel gamePanel, KeyHandler keyHandler) {
@@ -58,6 +60,14 @@ public class Player extends Entity {
 		addImage(EntityDirection.DOWN, "/player/characters.png", 1*48, 0*48, 48, 48);
 		addImage(EntityDirection.DOWN, "/player/characters.png", 2*48, 0*48, 48, 48);
 		
+		addImage(EntityDirection.DOWN_LEFT, "/player/characters.png", 0*48, 1*48, 48, 48);
+		addImage(EntityDirection.DOWN_LEFT, "/player/characters.png", 1*48, 1*48, 48, 48);
+		addImage(EntityDirection.DOWN_LEFT, "/player/characters.png", 2*48, 1*48, 48, 48);
+		
+		addImage(EntityDirection.DOWN_RIGHT, "/player/characters.png", 0*48, 2*48, 48, 48);
+		addImage(EntityDirection.DOWN_RIGHT, "/player/characters.png", 1*48, 2*48, 48, 48);
+		addImage(EntityDirection.DOWN_RIGHT, "/player/characters.png", 2*48, 2*48, 48, 48);
+		
 		addImage(EntityDirection.LEFT, "/player/characters.png", 0*48, 1*48, 48, 48);
 		addImage(EntityDirection.LEFT, "/player/characters.png", 1*48, 1*48, 48, 48);
 		addImage(EntityDirection.LEFT, "/player/characters.png", 2*48, 1*48, 48, 48);
@@ -69,14 +79,32 @@ public class Player extends Entity {
 		addImage(EntityDirection.UP, "/player/characters.png", 0*48, 3*48, 48, 48);
 		addImage(EntityDirection.UP, "/player/characters.png", 1*48, 3*48, 48, 48);
 		addImage(EntityDirection.UP, "/player/characters.png", 2*48, 3*48, 48, 48);
+		
+		addImage(EntityDirection.UP_LEFT, "/player/characters.png", 0*48, 1*48, 48, 48);
+		addImage(EntityDirection.UP_LEFT, "/player/characters.png", 1*48, 1*48, 48, 48);
+		addImage(EntityDirection.UP_LEFT, "/player/characters.png", 2*48, 1*48, 48, 48);
+		
+		addImage(EntityDirection.UP_RIGHT, "/player/characters.png", 0*48, 2*48, 48, 48);
+		addImage(EntityDirection.UP_RIGHT, "/player/characters.png", 1*48, 2*48, 48, 48);
+		addImage(EntityDirection.UP_RIGHT, "/player/characters.png", 2*48, 2*48, 48, 48);
 	}
 	
 	public void update() {
+		
+		EntityDirection tmpDirection = keyHandler.getDirection();
+		if(tmpDirection == EntityDirection.NONE) {
+			move = false;
+		}
+		else {
+			direction = tmpDirection;
+			move = true;
+		}
+		
 		collisionOn = false;
 		
 		currentSpeed = speed;
 		
-		if(keyHandler.isSpeedPressed() && stamina > 0 && keyHandler.hasKeyPressed()) {
+		if(move && stamina > 0 && keyHandler.isSpeedPressed()) {
 			currentSpeed*=2;
 			stamina--;
 			staminaWaitNumber = staminaWaitMax;
@@ -89,31 +117,67 @@ public class Player extends Entity {
 				stamina+=1;
 			}
 		}
-
-		if(keyHandler.isUpPressed()) {
-			direction = EntityDirection.UP;
-			collisionCheck();
-			if(!collisionOn) worldY -= currentSpeed;
+		
+		if(tmpDirection == EntityDirection.NONE) {
+			return;
 		}
-		else if(keyHandler.isDownPressed()) {
-			direction = EntityDirection.DOWN;
+		
+		switch(direction) {
+		case DOWN:
 			collisionCheck();
 			if(!collisionOn) worldY += currentSpeed;
-		}
-		else if(keyHandler.isLeftPressed()) {
-			direction = EntityDirection.LEFT;
+			break;
+		case DOWN_LEFT:
+			currentSpeed/=Math.sqrt(2);
+			collisionCheck(EntityDirection.DOWN);
+			if(!collisionOn) worldY += currentSpeed;
+			collisionOn = false;
+			collisionCheck(EntityDirection.LEFT);
+			if(!collisionOn) worldX -= currentSpeed;
+			break;
+		case DOWN_RIGHT:
+			currentSpeed/=Math.sqrt(2);
+			collisionCheck(EntityDirection.DOWN);
+			if(!collisionOn) worldY += currentSpeed;
+			collisionOn = false;
+			collisionCheck(EntityDirection.RIGHT);
+			if(!collisionOn) worldX += currentSpeed;
+			break;
+		case LEFT:
 			collisionCheck();
 			if(!collisionOn) worldX -= currentSpeed;
-		}
-		else if(keyHandler.isRightPressed()) {
-			direction = EntityDirection.RIGHT;
+			break;
+		case NONE:
+			break;
+		case RIGHT:
 			collisionCheck();
 			if(!collisionOn) worldX += currentSpeed;
+			break;
+		case UP:
+			collisionCheck();
+			if(!collisionOn) worldY -= currentSpeed;
+			break;
+		case UP_LEFT:
+			currentSpeed/=Math.sqrt(2);
+			collisionCheck(EntityDirection.UP);
+			if(!collisionOn) worldY -= currentSpeed;
+			collisionOn = false;
+			collisionCheck(EntityDirection.LEFT);
+			if(!collisionOn) worldX -= currentSpeed;
+			break;
+		case UP_RIGHT:
+			currentSpeed/=Math.sqrt(2);
+			collisionCheck(EntityDirection.UP);
+			if(!collisionOn) worldY -= currentSpeed;
+			collisionOn = false;
+			collisionCheck(EntityDirection.RIGHT);
+			if(!collisionOn) worldX += currentSpeed;
+			break;
 		}
 		
 		calculTile();
 	}
-	
+
 	private void pickUpObject(SuperObject object) {
 		
 		switch(object.getCategory()) {
@@ -149,14 +213,25 @@ public class Player extends Entity {
 		
 		gamePanel.getCollisionChecker().checkTile(this);
 	}
+	
+	private void collisionCheck(EntityDirection direction) {
+		SuperObject object = gamePanel.getCollisionChecker().checkObject(this, true, direction);
+		if(object != null) {
+			pickUpObject(object);
+		}
+		
+		gamePanel.getCollisionChecker().checkTile(this, direction);
+	}
 
 	public void draw(Graphics2D graphics2d) {
 		
 		BufferedImage image = getImage(direction, spriteValue);
 
-		if(stamina < maxStamina) {
-			graphics2d.setColor(new Color(255, 255, 255, 200));
-			graphics2d.fillRect(screenX, screenY - 10, (int)(stamina/maxStamina*gamePanel.getTileSize()), 5);
+		if(stamina < maxStamina && stamina > 0) {		
+			graphics2d.setColor(new Color(70, 180, 255, 220));
+			graphics2d.fillRect(screenX, screenY - gamePanel.getTileSize()/8, (int)(stamina/maxStamina*gamePanel.getTileSize()), gamePanel.getTileSize()/16);
+			graphics2d.setColor(new Color(90, 230, 255, 230));
+			graphics2d.drawRect(screenX, screenY - gamePanel.getTileSize()/8, (int)(stamina/maxStamina*gamePanel.getTileSize()), gamePanel.getTileSize()/16);
 		}
 		
 		if(image != null) {
@@ -164,10 +239,10 @@ public class Player extends Entity {
 		}
 		else {
 			graphics2d.setColor(Color.WHITE);
-			graphics2d.drawRect(worldX, worldY, gamePanel.getTileSize(), gamePanel.getTileSize());
+			graphics2d.drawRect(screenX, screenY, gamePanel.getTileSize(), gamePanel.getTileSize());
 		}
 		
-		if(keyHandler.hasKeyPressed()) {
+		if(move) {
 			updateSpriteCounter();
 		}
 		
