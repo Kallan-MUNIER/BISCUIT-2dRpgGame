@@ -1,0 +1,12 @@
+ global:
+  category: "OPEN"
+  name: "Coffre"
+  collision: true
+  hit-box:
+    x: 999999
+    y: 999999
+    width: 1
+    height: 1
+  sprites-animation-counter: 30
+  sprites-path:
+  - "/objects/sprites/chest.png"

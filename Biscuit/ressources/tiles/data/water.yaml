@@ -1,0 +1,6 @@
+ global:
+  collision: false
+  speed-modifier: 0.5
+  sprites-animation-counter: 10
+  sprites-path:
+  - "/tiles/sprites/water.png"

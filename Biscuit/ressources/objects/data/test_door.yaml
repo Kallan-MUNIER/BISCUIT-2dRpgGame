@@ -1,0 +1,12 @@
+ global:
+  category: "BLOCKED"
+  name: "Porte"
+  collision: true
+  hit-box:
+    x: 999999
+    y: 999999
+    width: 1
+    height: 1
+  sprites-animation-counter: 30
+  sprites-path:
+  - "/objects/sprites/door.png"

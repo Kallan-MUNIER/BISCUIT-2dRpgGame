@@ -1,0 +1,6 @@
+ global:
+  collision: true
+  speed-modifier: 1
+  sprites-animation-counter: 10
+  sprites-path:
+  - "/tiles/sprites/wall.png"

@@ -1,0 +1,12 @@
+ global:
+  category: "PICK_UP"
+  name: "Clé"
+  collision: false
+  hit-box:
+    x: 4
+    y: 999999
+    width: 2
+    height: 1
+  sprites-animation-counter: 30
+  sprites-path:
+  - "/objects/sprites/key.png"

@@ -1,0 +1,9 @@
+ global:
+  collision: false
+  speed-modifier: 1
+  sprites-animation-counter: 30
+  sprites-path:
+  - "/tiles/sprites/grass0.png"
+  - "/tiles/sprites/grass1.png"
+  - "/tiles/sprites/grass2.png"
+  - "/tiles/sprites/grass1.png"
